@@ -6,7 +6,7 @@ module Surveyor
   module SurveyorControllerMethods
     extend ActiveSupport::Concern
     included do
-      before_filter :get_current_user, :only => [:new, :create]
+      # before_filter :get_current_user, :only => [:new, :create]
       before_filter :determine_if_javascript_is_enabled, :only => [:create, :update]
       before_filter :set_response_set_and_render_context, :only => [:edit, :show]
 
