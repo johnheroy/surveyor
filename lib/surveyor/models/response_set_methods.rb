@@ -18,6 +18,7 @@ module Surveyor
         validates_associated :responses
         validates_uniqueness_of :access_code
         validates_presence_of :student_id # for relational lookup student.response_sets to work
+        validates_presence_of :survey_period # to distinguish between different survey periods
 
         # Derived attributes
         before_create :ensure_start_timestamp
