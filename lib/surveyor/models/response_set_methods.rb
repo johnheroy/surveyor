@@ -9,9 +9,14 @@ module Surveyor
         # Associations
         belongs_to :survey
         belongs_to :student # custom modification
+        validates_presence_of :year # custom
+        validates_numericality_of :year # custom
         has_many :responses, :dependent => :destroy
         accepts_nested_attributes_for :responses, :allow_destroy => true
         attr_accessible *PermittedParams.new.response_set_attributes if defined? ActiveModel::MassAssignmentSecurity
+
+        # set the survey year (based on student--custom mod)
+        before_create :assign_year
 
         # Validations
         validates_presence_of :survey_id
@@ -23,6 +28,7 @@ module Surveyor
         # Derived attributes
         before_create :ensure_start_timestamp
         before_create :ensure_identifiers
+
       end
 
       module ClassMethods
@@ -31,6 +37,10 @@ module Surveyor
           return false if (q = Question.find_by_id(hash["question_id"])) and q.pick == "one"
           hash.any?{|k,v| v.is_a?(Array) ? v.all?{|x| x.to_s.blank?} : v.to_s.blank?}
         end
+      end
+
+      def assign_year
+        self.year = self.student.year
       end
 
       def ensure_start_timestamp
