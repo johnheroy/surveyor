@@ -40,7 +40,7 @@ module Surveyor
       end
 
       def assign_year
-        self.year = self.student.year
+        self.year = self.student.year_level
       end
 
       def ensure_start_timestamp
