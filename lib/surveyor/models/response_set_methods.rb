@@ -9,8 +9,7 @@ module Surveyor
         # Associations
         belongs_to :survey
         belongs_to :student # custom modification
-        validates_presence_of :year # custom
-        validates_numericality_of :year # custom
+        
         has_many :responses, :dependent => :destroy
         accepts_nested_attributes_for :responses, :allow_destroy => true
         attr_accessible *PermittedParams.new.response_set_attributes if defined? ActiveModel::MassAssignmentSecurity
