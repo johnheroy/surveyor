@@ -61,6 +61,7 @@ module Surveyor
     def edit
       # @response_set is set in before_filter - set_response_set_and_render_context
       if @response_set.completed_at
+        flash[:notice] = "You have already completed the survey, please contact us if this message is in error"
         redirect_to thank_you_path
       elsif @response_set
         @sections = SurveySection.where(survey_id: @response_set.survey_id).includes([:survey, {questions: [{answers: :question}, {question_group: :dependency}, :dependency]}])
