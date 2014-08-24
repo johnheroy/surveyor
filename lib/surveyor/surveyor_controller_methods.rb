@@ -60,7 +60,9 @@ module Surveyor
 
     def edit
       # @response_set is set in before_filter - set_response_set_and_render_context
-      if @response_set
+      if @response_set.completed_at
+        redirect_to thank_you_path
+      elsif @response_set
         @sections = SurveySection.where(survey_id: @response_set.survey_id).includes([:survey, {questions: [{answers: :question}, {question_group: :dependency}, :dependency]}])
         @section = (section_id_from(params) ? @sections.where(id: section_id_from(params)).first : @sections.first) || @sections.first
         @survey = @section.survey
