@@ -28,6 +28,9 @@ module Surveyor
         before_create :ensure_start_timestamp
         before_create :ensure_identifiers
 
+        # Custom callback to update student info if survey submitted
+        after_update :update_student_particulars
+
       end
 
       module ClassMethods
@@ -35,6 +38,19 @@ module Surveyor
           return true if hash["answer_id"].blank?
           return false if (q = Question.find_by_id(hash["question_id"])) and q.pick == "one"
           hash.any?{|k,v| v.is_a?(Array) ? v.all?{|x| x.to_s.blank?} : v.to_s.blank?}
+        end
+      end
+
+      def update_student_particulars
+        # check survey has been submitted
+        if self.completed_at
+          student = self.student
+          student.name = self.responses.first.string_value
+          student.school = self.responses.second.string_value
+          student.year_level = self.responses.third.string_value
+          student.location = self.responses.fourth.string_value
+          student.subject = self.responses.fifth.string_value
+          student.save
         end
       end
 
