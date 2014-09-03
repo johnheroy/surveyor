@@ -87,7 +87,7 @@ module Surveyor
         student.subject = @response_set.responses.fifth.string_value
         student.save
 
-        redirect_with_message(thank_you_path, :notice, t('surveyor.completed_survey'))
+        return redirect_with_message(thank_you_path, :notice, t('surveyor.completed_survey'))
       end
 
       respond_to do |format|
