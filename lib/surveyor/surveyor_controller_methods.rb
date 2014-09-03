@@ -78,7 +78,17 @@ module Surveyor
       question_ids_for_dependencies = (params[:r] || []).map{|k,v| v["question_id"] }.compact.uniq
       saved = load_and_update_response_set_with_retries
 
-      return redirect_with_message(thank_you_path, :notice, t('surveyor.completed_survey')) if saved && params[:finish]
+      if saved && params[:finish] # survey finished
+        student = @response_set.student
+        student.name = @response_set.responses.first.string_value
+        student.school = @response_set.responses.second.string_value
+        student.year_level = @response_set.responses.third.string_value.to_i
+        student.location = @response_set.responses.fourth.string_value
+        student.subject = @response_set.responses.fifth.string_value
+        student.save
+
+        redirect_with_message(thank_you_path, :notice, t('surveyor.completed_survey'))
+      end
 
       respond_to do |format|
         format.html do
