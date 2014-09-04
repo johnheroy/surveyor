@@ -80,11 +80,11 @@ module Surveyor
 
       if saved && params[:finish] # survey finished
         student = @response_set.student
-        student.name = @response_set.responses.first.string_value
-        student.school = @response_set.responses.second.string_value
-        student.year_level = @response_set.responses.third.string_value.to_i
-        student.location = @response_set.responses.fourth.string_value
-        student.subject = @response_set.responses.fifth.string_value
+        student.name       = @response_set.responses.where(answer: Answer.find_by_reference_identifier("name"))
+        student.school     = @response_set.responses.where(answer: Answer.find_by_reference_identifier("school"))
+        student.year_level = @response_set.responses.where(answer: Answer.find_by_reference_identifier("year")).to_i
+        student.location   = @response_set.responses.where(answer: Answer.find_by_reference_identifier("location"))
+        student.subject    = @response_set.responses.where(answer: Answer.find_by_reference_identifier("subject"))
         student.save
 
         return redirect_with_message(thank_you_path, :notice, t('surveyor.completed_survey'))
