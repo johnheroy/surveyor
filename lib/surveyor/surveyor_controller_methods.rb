@@ -82,11 +82,11 @@ module Surveyor
         student = @response_set.student
         puts "getting student info for any update"
 
-        student.name       = @response_set.responses.where(answer: Answer.find_by_reference_identifier("name"))    .first.string_value
-        student.school     = @response_set.responses.where(answer: Answer.find_by_reference_identifier("school"))  .first.string_value
-        student.year_level = @response_set.responses.where(answer: Answer.find_by_reference_identifier("year"))    .first.string_value
-        student.location   = @response_set.responses.where(answer: Answer.find_by_reference_identifier("location")).first.string_value
-        student.subject    = @response_set.responses.where(answer: Answer.find_by_reference_identifier("subject")) .first.string_value
+        student.name       = @response_set.responses.where(answer: Answer.where(reference_identifier: "name").order("created_at DESC").first).first.string_value
+        student.school     = @response_set.responses.where(answer: Answer.where(reference_identifier: "school").order("created_at DESC").first).first.string_value
+        student.year_level = @response_set.responses.where(answer: Answer.where(reference_identifier: "year").order("created_at DESC").first).first.string_value
+        student.location   = @response_set.responses.where(answer: Answer.where(reference_identifier: "location").order("created_at DESC").first).first.string_value
+        student.subject    = @response_set.responses.where(answer: Answer.where(reference_identifier: "subject").order("created_at DESC").first).first.string_value
 
         student.save
 
